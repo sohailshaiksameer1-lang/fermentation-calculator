@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="google-site-verification" content="E_W2OzRRlKaXRTXvaOY2g2tYUp9SPDsXg7RDqo2J56M" />
-    
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Home Fermentation Brine Calculator</title>
+    <title>Free Home Fermentation & Baking Calculators</title>
+    <meta name="google-site-verification" content="E_W2OzRRlKaXRTXvaOY2g2tYUp9SPDsXg7RDqo2J56M" />
     <style>
         :root {
             --primary: #2c6e49;
             --background: #fefee3;
             --card-bg: #ffffff;
             --text: #4c3b2b;
+            --gray-border: #e0e0e0;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -19,34 +20,65 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
         .container {
             background: var(--card-bg);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
+            box-sizing: border-box;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gray-border);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            font-weight: bold;
+            font-size: 14px;
+            color: #888;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        .calc-panel {
+            display: none;
+        }
+        .calc-panel.active {
+            display: block;
         }
         h1 {
             color: var(--primary);
-            font-size: 24px;
+            font-size: 22px;
             margin-top: 0;
             text-align: center;
+            margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
+            font-size: 15px;
         }
         input, select {
             width: 100%;
             padding: 10px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--gray-border);
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 16px;
@@ -59,7 +91,7 @@
             background-color: #f4f9f4;
             border-left: 4px solid var(--primary);
             padding: 15px;
-            margin-top: 25px;
+            margin-top: 20px;
             border-radius: 0 6px 6px 0;
         }
         .result-title {
@@ -68,62 +100,135 @@
             margin-bottom: 5px;
         }
         .result-value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
+            margin-bottom: 5px;
         }
         .help-text {
             font-size: 12px;
             color: #888;
             margin-top: 4px;
         }
+        .seo-content {
+            max-width: 420px;
+            margin: 25px auto;
+            padding: 10px;
+            line-height: 1.6;
+        }
+        .seo-content h2 {
+            color: var(--primary);
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .seo-content h3 {
+            color: var(--primary);
+            font-size: 15px;
+        }
+        .seo-content p, .seo-content ul {
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Fermentation Brine Calc</h1>
-    
-    <div class="form-group">
-        <label for="water">Water Volume</label>
-        <input type="number" id="water" value="500" min="1" oninput="calculateBrine()">
-        <select id="unit" onchange="calculateBrine()" style="margin-top: 8px;">
-            <option value="ml">Milliliters (ml)</option>
-            <option value="grams">Grams (g)</option>
-        </select>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('brine')">Brine Calc</button>
+        <button class="tab-btn" onclick="switchTab('sourdough')">Sourdough Calc</button>
     </div>
 
-    <div class="form-group">
-        <label for="saltPct">Desired Salt Percentage (%)</label>
-        <input type="number" id="saltPct" value="2.5" min="0.5" max="10" step="0.1" oninput="calculateBrine()">
-        <div class="help-text">Standard vegetable ferments usually use 2% to 3%.</div>
+    <!-- PANEL 1: BRINE -->
+    <div id="brine" class="calc-panel active">
+        <h1>Fermentation Brine Calc</h1>
+        <div class="form-group">
+            <label for="water">Water Volume</label>
+            <input type="number" id="water" value="500" min="1" oninput="calculateBrine()">
+            <select id="unit" onchange="calculateBrine()" style="margin-top: 8px;">
+                <option value="ml">Milliliters (ml)</option>
+                <option value="grams">Grams (g)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="saltPct">Desired Salt Percentage (%)</label>
+            <input type="number" id="saltPct" value="2.5" min="0.5" max="10" step="0.1" oninput="calculateBrine()">
+            <div class="help-text">Standard vegetable ferments usually use 2% to 3%.</div>
+        </div>
+        <div class="result-box">
+            <div class="result-title">Required Salt Weight:</div>
+            <div class="result-value"><span id="saltResult">12.5</span> grams</div>
+        </div>
     </div>
 
-    <div class="result-box">
-        <div class="result-title">Required Salt Weight:</div>
-        <div class="result-value"><span id="saltResult">12.5</span> grams</div>
+    <!-- PANEL 2: SOURDOUGH -->
+    <div id="sourdough" class="calc-panel">
+        <h1>Sourdough Hydration Calc</h1>
+        <div class="form-group">
+            <label for="flour">Total Flour Weight (g)</label>
+            <input type="number" id="flour" value="500" min="1" oninput="calculateSourdough()">
+        </div>
+        <div class="form-group">
+            <label for="hydration">Target Hydration Percentage (%)</label>
+            <input type="number" id="hydration" value="70" min="50" max="100" oninput="calculateSourdough()">
+            <div class="help-text">Beginners usually start around 65% to 70%.</div>
+        </div>
+        <div class="result-box">
+            <div class="result-title">Recipe Breakdown:</div>
+            <div class="result-value" style="font-size: 16px; font-weight: normal;">
+                💧 Water Needed: <strong><span id="waterResult">350</span>g</strong><br>
+                🌾 Starter (Inoculation at 20%): <strong><span id="starterResult">100</span>g</strong><br>
+                🧂 Salt (Standard 2%): <strong><span id="sourdoughSaltResult">10</span>g</strong>
+            </div>
+        </div>
     </div>
 </div>
-<div style="max-width: 400px; margin: 20px auto; padding: 20px; font-family: sans-serif; color: #4c3b2b; line-height: 1.6;">
-    <h2 style="color: #2c6e49; font-size: 18px;">How to Use the Fermentation Brine Calculator</h2>
-    <p style="font-size: 14px;">Getting the salt-to-water ratio exactly right is the most critical step in wild lacto-fermentation. This free online brine calculator uses precision weight metrics in grams to eliminate the guesswork caused by variations in salt crystal sizes across different brands (like Kosher vs. sea salt).</p>
+
+<!-- SEO EXPLANATION TEXT -->
+<div class="seo-content">
+    <h2>How to Use These Precision Ratios</h2>
+    <p>Getting your ingredient weights exactly right prevents failure in both wild lacto-fermentation and artisan baking. Standard culinary measurements like teaspoons or cups are highly inaccurate because different ingredient brands have varying crystal sizes and flour densities.</p>
     
-    <h3 style="color: #2c6e49; font-size: 15px; margin-top: 15px;">Standard Salinity Guidelines:</h3>
-    <ul style="font-size: 13px; padding-left: 20px;">
-        <li><strong>2.0% - 2.5%:</strong> Ideal for soft vegetables like cucumbers, hot peppers, zucchini, and traditional sauerkraut.</li>
-        <li><strong>3.0% - 5.0%:</strong> Best for firm vegetables, warm environments, or long-term aging (such as whole root vegetables or olives).</li>
-    </ul>
-    <p style="font-size: 14px; margin-top: 10px;">Simply input your water volume, choose your preferred target salinity percentage, and weigh out the exact salt requirement on a digital kitchen scale for safe, mold-free fermenting every single time.</p>
+    <h3>Fermentation Brine Guidelines</h3>
+    <p>Always base your percentages on the weight of the water. Standard vegetable ferments like cucumbers or chilis excel at a 2.0% to 2.5% concentration, whereas firm root vegetables benefit from a 3.0% to 5.0% brine.</p>
+
+    <h3>Sourdough Hydration Matrix</h3>
+    <p>Hydration determines the open structure and crumb of your artisan bread. A lower hydration profile (65%) yields dough that is structural and easy to shape. High hydration doughs (75%+) produce massive, glassy air bubbles but require advanced stretch-and-fold techniques.</p>
 </div>
-    
+
 <script>
+function switchTab(tabId) {
+    // Hide all panels and deactivate all buttons
+    document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    // Activate clicked tab
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
 function calculateBrine() {
     const water = parseFloat(document.getElementById('water').value) || 0;
     const saltPct = parseFloat(document.getElementById('saltPct').value) || 0;
     const saltNeeded = (water * saltPct) / 100;
     document.getElementById('saltResult').innerText = saltNeeded.toFixed(1);
 }
+
+function calculateSourdough() {
+    const flour = parseFloat(document.getElementById('flour').value) || 0;
+    const hydration = parseFloat(document.getElementById('hydration').value) || 0;
+    
+    // Standard artisan bakers formula:
+    // Water = Flour * Hydration %
+    // Starter = 20% of Flour weight
+    // Salt = 2% of Flour weight
+    const waterNeeded = (flour * hydration) / 100;
+    const starterNeeded = flour * 0.20;
+    const saltNeeded = flour * 0.02;
+    
+    document.getElementById('waterResult').innerText = waterNeeded.toFixed(0);
+    document.getElementById('starterResult').innerText = starterNeeded.toFixed(0);
+    document.getElementById('sourdoughSaltResult').innerText = saltNeeded.toFixed(0);
+}
 </script>
 
 </body>
 </html>
-
