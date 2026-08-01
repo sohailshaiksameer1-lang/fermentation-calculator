@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Home Fermentation Brine Calculator</title>
+    <style>
+        :root {
+            --primary: #2c6e49;
+            --background: #fefee3;
+            --card-bg: #ffffff;
+            --text: #4c3b2b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-top: 0;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .result-box {
+            background-color: #f4f9f4;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 0 6px 6px 0;
+        }
+        .result-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .result-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Fermentation Brine Calc</h1>
+    
+    <div class="form-group">
+        <label for="water">Water Volume</label>
+        <input type="number" id="water" value="500" min="1" oninput="calculateBrine()">
+        <select id="unit" onchange="calculateBrine()" style="margin-top: 8px;">
+            <option value="ml">Milliliters (ml)</option>
+            <option value="grams">Grams (g)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="saltPct">Desired Salt Percentage (%)</label>
+        <input type="number" id="saltPct" value="2.5" min="0.5" max="10" step="0.1" oninput="calculateBrine()">
+        <div class="help-text">Standard vegetable ferments usually use 2% to 3%.</div>
+    </div>
+
+    <div class="result-box">
+        <div class="result-title">Required Salt Weight:</div>
+        <div class="result-value"><span id="saltResult">12.5</span> grams</div>
+    </div>
+</div>
+
+<script>
+function calculateBrine() {
+    const water = parseFloat(document.getElementById('water').value) || 0;
+    const saltPct = parseFloat(document.getElementById('saltPct').value) || 0;
+    const saltNeeded = (water * saltPct) / 100;
+    document.getElementById('saltResult').innerText = saltNeeded.toFixed(1);
+}
+</script>
+
+</body>
+</html>
 
